@@ -1,2 +1,3 @@
 # phin
-A set financial functions written in C++ with a swig wrapper for Python
+A set of financial functions written in C++ with a swig wrapper for Python
+
