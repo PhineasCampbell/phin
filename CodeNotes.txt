@@ -1,5 +1,0 @@
-These are notes for this project
-
-import sys
-sys.path.append('C:\\Documents and Settings\\Phineas\\My Documents\\GBPEnviron')
-import SwapTest
