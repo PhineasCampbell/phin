@@ -23,7 +23,7 @@ void curve::SetLibors(std::vector<double>libors)
 }
 
 
-// Given the set of swaps in the form of a std::vector make a deep copy to the class's private data member _libor
+// Given the set of swaps in the form of a std::vector make a deep copy to the class's private data member _swaps
 void curve::SetSwaps(std::vector<double>swaps)
 {
 	for(long i = 0; i < NUMBER_OF_SWAPS; i++)
