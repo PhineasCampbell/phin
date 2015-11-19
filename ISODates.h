@@ -1,17 +1,16 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //	This class is a set of routines to deal with dates for financial products.  The most basic thing it does is
-//	generate payment schedules.  In general a fincail instrument will pay a set of cashflows a various predetermined 
-//	points in time e.g. semi annually on the 27 of Feburary and 27 August for the next 8 years.  The issue is what
-//	to do if payments cannot be made on these dates. The class works by dealing with dates in two formats: the ISO 
-//	format: YYYYMMDD and the number of days since 2000, converting between them as and when necessary.  This will
-//	only deal with ISDA standard GBP dates
+//	generate payment schedules.  In general a financial instrument will pay a set of cashflows at various 
+//  predetermined points in time e.g. semi annually on the 27 of Feburary and 27 August for the next 8 years.  
+//  The issue is what to do if payments cannot be made on these dates. The class works by dealing with dates in two 
+//  formats: the ISO format: YYYYMMDD and the number of days since 2000, converting between them as and when necessary.  
+//	This will only deal with ISDA standard GBP dates
 //
 //	TODO:
 //		Check unadjusted.  Does unadjusted really mean that the date will be unchanged even if it is a date on which
 //		payments cannot be made.
 //		Extend generating schedules to include IMM dates and last day of month
-//		Extend Bank Holiday
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -84,7 +83,7 @@ public:
 	bool IsBankHoliday(long daysSince2000);
 	// Convert ISODate to Days Since 2000
 	long ConvertToDaysSince2000(long date);
-	// Give the day of month, the month number and the year number return the ISO date form
+	// Given the day of month, the month number and the year number return the ISO date form
 	long ConvertToISO(long dayOfMonth, long Month, long Year)  // note inlined
 	{
 		return dayOfMonth + Month * 100 + Year*10000;

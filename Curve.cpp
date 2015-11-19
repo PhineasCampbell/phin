@@ -105,7 +105,7 @@ bool curve::Build()
 }
 
 
-// Given a date in the years since 2000 format return the discount factor for the date.  It does no checking on the 
+// Given a date in the days since 2000 format return the discount factor for the date.  It does no checking on the 
 // input dates, it might return a Df for dates before the start of the df curve or dates beyond the the final date in
 // the DF curve.  
 double curve::GetDFFromYearsSince2000(long daysSince2000)
@@ -142,7 +142,7 @@ double curve::GetDFFromYearsSince2000(long daysSince2000)
 }
 
 
-// Given a date in ISO format return the DF for that date.  Calls the function above.
+// Given a date in ISO format return the discount factor for that date.  Calls the function above.
 double curve::GetDFFromISODate(long date)
 {
 	double discountFactor = 0;
@@ -155,26 +155,37 @@ double curve::GetDFFromISODate(long date)
 }
 
 
-// Given two dates in ISO format return the linear annualized rate between those dates
-// Extend to years since 2000 input
-double curve::AnnualRate(long StartDate, long EndDate)
+// Given two dates in days in since 2000 format return the linear annualized rate between those dates
+double curve::AnnualRateFromDate(long StartDate, long EndDate)
 {
 	double annualRate = 0;
-
-	// Get the ISO Dates
-	long StartDateDays = ConvertToDaysSince2000(StartDate);
-	long EndDateDays = ConvertToDaysSince2000(EndDate);
 
 	// In order to stop this function failing we exit if the end date is 0 by arbitrarily returning 0
 	if(EndDate == 0)
 		return annualRate;
 
 	// Get the dfs
-	double startDF = GetDFFromYearsSince2000(StartDateDays);
-	double endDF = GetDFFromYearsSince2000(EndDateDays);
+	double startDF = GetDFFromYearsSince2000(StartDate);
+	double endDF = GetDFFromYearsSince2000(EndDate);
 	
 	// Convert to annual rate
-	annualRate = (startDF/endDF-1)/((EndDateDays-StartDateDays)/DAYS_PER_YEAR);
+	annualRate = (startDF/endDF-1)/((StartDate-EndDate)/DAYS_PER_YEAR);
+
+	return annualRate;
+}
+
+
+// Given two dates in ISO format return the linear annualized rate between those dates
+// Calls the function above
+double curve::AnnualRateFromISODate(long StartDate, long EndDate)
+{
+	double annualRate = 0;
+
+	// Covert dates from ISO format to days since 2000
+	long StartDateDays = ConvertToDaysSince2000(StartDate);
+	long EndDateDays = ConvertToDaysSince2000(EndDate);
+
+	annualRate = AnnualRateFromDate(StartDateDays,EndDateDays);
 
 	return annualRate;
 }

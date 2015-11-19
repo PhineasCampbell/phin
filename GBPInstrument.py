@@ -59,11 +59,11 @@ class GBPSwap(phin.ISODate):
                 else:
                     # If payer that is the pay side should be the fixed rate and negative
                     if(PayReceive == 'P'):
-                        self._receiveSide[i] = self._curve.AnnualRate(oldDate,i)*ds.YearFrac(oldDate,i)
+                        self._receiveSide[i] = self._curve.ISOAnnualRate(oldDate,i)*ds.YearFrac(oldDate,i)
                         self._paySide[i] = -1*fixed_rate*ds.YearFrac(oldDate,i)
                     else:
                         self._receiveSide[i] = fixed_rate*ds.YearFrac(oldDate,i)
-                        self._paySide[i] = -1*self._curve.AnnualRate(oldDate,i)*ds.YearFrac(oldDate,i)
+                        self._paySide[i] = -1*self._curve.AnnualRateFromISODate(oldDate,i)*ds.YearFrac(oldDate,i)
                 oldDate = i
 
             # We now deal with the first pay on float side
@@ -93,11 +93,11 @@ class GBPSwap(phin.ISODate):
                 else:
                     # If payer that is the pay side should be the fixed rate and negative
                     if(PayReceive == 'P'):
-                        self._receiveSide[i] = self._curve.AnnualRate(oldDate,i)*ds.YearFrac(oldDate,i)
+                        self._receiveSide[i] = self._curve.AnnualRateFromISODate(oldDate,i)*ds.YearFrac(oldDate,i)
                         self._paySide[i] = -1*fixed_rate*ds.YearFrac(oldDate,i)
                     else:
                         self._receiveSide[i] = fixed_rate*ds.YearFrac(oldDate,i)
-                        self._paySide[i] = -1*self._curve.AnnualRate(oldDate,i)*ds.YearFrac(oldDate,i)
+                        self._paySide[i] = -1*self._curve.AnnualRateFromISODate(oldDate,i)*ds.YearFrac(oldDate,i)
                 oldDate = i
 
     def pv_pay(self):

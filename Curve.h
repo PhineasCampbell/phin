@@ -11,7 +11,7 @@
 //		code check the original source.  The date functionality comes from the ISODate class
 //
 //		The libors and swaps are passed into the class via the standard library vector objects, this has the advantage
-//		that there is a map from the python list to the vector hoever it might limit the library being called from 
+//		that there is a map from the python list to the vector however it might limit the library being called from 
 //		other environments.  Note on the ISO Date Format ISO 8601 defines YYYY-MM-DD or YYYYMMDD as acceptable however
 //		this library only uses YYYYMMDD as it is easily representable as a long or integer thus can be passed between
 //		various systems.
@@ -42,9 +42,9 @@ public:
 	curve(){return;}
 	// Constructor to set the value date, libors and swaps
 	curve(long valueDate, std::vector<double> libors, std::vector<double> swaps);
-	// Set the swaps
+	// Set the LIBOR rates
 	void SetLibors(std::vector<double> libors);
-	// Set the libors
+	// Set the swap rates
 	void SetSwaps(std::vector<double> swaps);
 	// Set the value date
 	void SetValueDate(long valueDate){_ValueDate = valueDate;return;}
@@ -54,9 +54,12 @@ public:
 	double GetDFFromISODate(long date);
 	// Given a date in the days from 2000 fromat return the discount factor for this date
 	double GetDFFromYearsSince2000(long date);
+	// Given a start date and an end date in the days since 2000 format return the linearized annual rate for the return 
+	//between the two dates
+	double AnnualRateFromDate(long startDate, long endDate);
 	// Given a start date and an end date in the ISO format return the linearized annual rate for the return between 
 	// the two dates
-	double AnnualRate(long startDate, long endDate);
+	double AnnualRateFromISODate(long startDate, long endDate);
 private:
 	// Array of libors
 	double _libors[NUMBER_OF_LIBORS];

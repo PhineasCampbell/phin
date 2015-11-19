@@ -33,7 +33,7 @@ ISODate::ISODate(long Date)
 }
 
 
-// Given a date in the ISO 8601 YYYYMMDD date format set the class
+// Given a date in the ISO 8601 YYYYMMDD date format set the date members of the class
 void ISODate::SetDate(long Date)
 {
 	_year = Date/10000;
@@ -105,7 +105,8 @@ long ISODate::DaysSince2000()
 }
 
 
-// Increment the date by <number> of units and return it
+// Increment the date by <number> of units and return it in either the ISO or days since 2000 format
+// The default is days since 2000 
 long ISODate::DateIncrement(DateUnit dp, long number, bool returnAsDaysSince2000)
 {
 	long dateToBeReturned = 0;
@@ -153,8 +154,8 @@ long ISODate::DateIncrement(DateUnit dp, long number, bool returnAsDaysSince2000
 }
 
 
-// What we are trying to do is find the number of days we have to daysSince2000 to get a good business day, that is a 
-// day that is not a Saturday, Sunday or bank holiday
+// Given a date in the days since 2000 format find the next good business day by moving either forward or backward
+// forward is default
 long ISODate::DaysToGoodBusinessDay(long daysSince2000, bool moveForward)
 {
 	long days = 0;
@@ -217,7 +218,7 @@ bool ISODate::IsGoodBusinessDay(long daysSince2000)
 }
 
 
-// Return tru if the date is a bank holiday.  The code is lifted from the function locate from section 3.4 in Numerical
+// Return true if the date is a bank holiday.  The code is lifted from the function locate from section 3.4 in Numerical
 // Recipes in C
 bool ISODate::IsBankHoliday(long daysSince2000)
 {
@@ -415,7 +416,7 @@ long ISODate::NextGoodBusinessDay(long dayOfMonth, long Month, long Year, Adjust
 }
 
 
-// Given a date in the ISO format: YYYYMMDD convert it to the years since 2000
+// Given a date in the ISO format: YYYYMMDD convert it to the days since 2000
 long ISODate::ConvertToDaysSince2000(long date)
 {
 	long year = date/10000;
