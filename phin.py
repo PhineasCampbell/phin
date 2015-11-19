@@ -387,8 +387,11 @@ class curve(ISODate):
     def GetDFFromYearsSince2000(self, date):
         return _phin.curve_GetDFFromYearsSince2000(self, date)
 
-    def AnnualRate(self, startDate, endDate):
-        return _phin.curve_AnnualRate(self, startDate, endDate)
+    def AnnualRateFromDate(self, startDate, endDate):
+        return _phin.curve_AnnualRateFromDate(self, startDate, endDate)
+
+    def AnnualRateFromISODate(self, startDate, endDate):
+        return _phin.curve_AnnualRateFromISODate(self, startDate, endDate)
     __swig_destroy__ = _phin.delete_curve
     __del__ = lambda self: None
 curve_swigregister = _phin.curve_swigregister
