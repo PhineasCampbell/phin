@@ -1,12 +1,15 @@
 This project is two c++ classes and swig generated wrapper so that the classes can be called by Python.
-The class ISODate is a set of date functions that are used to generate payment schedues for financial objects
-The second class curve bootstraps up the LIBORs and swap rates to build a GBP curve it exports functions
+The class: ISODate is a set of date functions that are used to generate payment schedues for financial objects
+The second class: curve bootstraps up the LIBORs and swap rates to build a GBP curve. It exports functions
 to calculate discount factors and forward rates
+
 The classes are contained in a module called phin
 
-You can copy the python files and _phin.pyd and put them somewhere Python 3.4 can see them an run the tests
-or on a Windows machine is you have cl.exe version 16.00.40219.01 link.exe version 10.00.40219.01 and
-SWIG version 3.0.07 you can build the bainaries and create the python wrapper file.
+You can copy the python files and _phin.pyd and put them somewhere Python 3.4 can see them and run the tests
+or on a Windows machine if you have cl.exe version 16.00.40219.01 link.exe version 10.00.40219.01 and
+SWIG version 3.0.07 you can build the binaries and create the python wrapper file.
+
+
 
 
 

@@ -12,8 +12,6 @@
 //		payments cannot be made.
 //		Extend generating schedules to include IMM dates and last day of month
 //		Extend Bank Holiday
-//		Get and Set for Adjustment Type
-//		YearFrac for ISODate
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -22,7 +20,7 @@
 // In England there cannot be more than 4 days to the nearest good business day
 const long MAX_DAYS_TO_GOOD_DAY = 4;
 // The number of elements in the Bank Holiday array
-const long BANK_HOLIDAY_COUNT = 8;
+const long BANK_HOLIDAY_COUNT = 80;
 // Cummulative number of days before the end of the month for a non leap year
 const long NON_LEAP_YEAR_MONTH_DAYS[12] = {0,31,59,90,120,151,181,212,243,273,304,334};
 // Cummulative number of days before the end of the month for a leap year
@@ -32,7 +30,12 @@ const long NON_LEAP_YEAR_MONTH_LENGTH[13] = {0,31,28,31,30,31,30,31,31,30,31,30,
 // The number of days in the month for a non leap year
 const long LEAP_YEAR_MONTH_LENGTH[13] = {0,31,29,31,30,31,30,31,31,30,31,30,31};
 // The GBP non business days in years since 2000 format
-const long GBP_HOLIDAYS[BANK_HOLIDAY_COUNT] = {5479,5571,5574,5602,5623,5721,5837,5840};
+const long GBP_HOLIDAYS[BANK_HOLIDAY_COUNT] = {5479,5571,5574,5599,5629,5721,5837,5840,5844,5928,5931,5965,5995,6087,
+	                                           6204,6205,6210,6313,6316,6330,6360,6452,6568,6569,6575,6663,6666,6695,
+											   6725,6817,6933,6934,6940,7048,7051,7060,7090,7182,7298,7299,7305,7405,
+											   7408,7426,7456,7548,7664,7667,7671,7762,7765,7791,7821,7913,8031,8032,
+											   8038,8140,8143,8156,8186,8278,8395,8396,8403,8497,8500,8521,8551,8643,
+											   8759,8760,8766,8854,8857,8887,8917,9009,9125,9126};
 // The class will fail if you ask for a date more than 100 years in advance
 const long MAX_YEARS = 100; 
 // The number of days in a non leap year year, added to avoid magic numbers
@@ -91,9 +94,8 @@ public:
 	{
 		return _dayOfMonth + _monthNumber * 100 + _year*10000;
 	}
-	// 
+	// Given a start date and end date return the number of years between the two dates assuming a 365 day year
 	double YearFrac(long ISO_Start, long ISO_End);
-
 private:
 	// Day of the month: 1 to 31
 	long _dayOfMonth;

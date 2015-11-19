@@ -12,6 +12,7 @@ curve::curve(long ValueDate, std::vector<double>libors, std::vector<double>swaps
 }
 
 
+// Given the set of libors in the form of a std::vector make a deep copy to the class's private data member _libor
 void curve::SetLibors(std::vector<double>libors)
 {
 	for(long i = 0; i < NUMBER_OF_LIBORS; i++)
@@ -22,6 +23,7 @@ void curve::SetLibors(std::vector<double>libors)
 }
 
 
+// Given the set of swaps in the form of a std::vector make a deep copy to the class's private data member _libor
 void curve::SetSwaps(std::vector<double>swaps)
 {
 	for(long i = 0; i < NUMBER_OF_SWAPS; i++)
@@ -159,14 +161,19 @@ double curve::AnnualRate(long StartDate, long EndDate)
 {
 	double annualRate = 0;
 
-	// Adjust the dates
+	// Get the ISO Dates
 	long StartDateDays = ConvertToDaysSince2000(StartDate);
 	long EndDateDays = ConvertToDaysSince2000(EndDate);
+
+	// In order to stop this function failing we exit if the end date is 0 by arbitrarily returning 0
+	if(EndDate == 0)
+		return annualRate;
 
 	// Get the dfs
 	double startDF = GetDFFromYearsSince2000(StartDateDays);
 	double endDF = GetDFFromYearsSince2000(EndDateDays);
-
+	
+	// Convert to annual rate
 	annualRate = (startDF/endDF-1)/((EndDateDays-StartDateDays)/DAYS_PER_YEAR);
 
 	return annualRate;

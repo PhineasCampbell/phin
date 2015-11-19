@@ -334,7 +334,7 @@ long ISODate::DateSince2000(long daysSince2000)
 }
 
 
-// Given a date in the for dd, mm, yyyy return the next good business day adjsuted according to adj
+// Given a date in the format dd, mm, yyyy return the next good business day adjusted according to adj
 long ISODate::NextGoodBusinessDay(long dayOfMonth, long Month, long Year, AdjustmentTypes adj)
 {
 	long daysSince2000 = DaysSince2000(dayOfMonth,Month,Year);
@@ -427,6 +427,7 @@ long ISODate::ConvertToDaysSince2000(long date)
 }
 
 
+// Given a start date and end date return the number of years between the two dates assuming a 365 day year
 double ISODate::YearFrac(long ISO_Start, long ISO_End)
 {
 	long startDays2000 = ConvertToDaysSince2000(ISO_Start);

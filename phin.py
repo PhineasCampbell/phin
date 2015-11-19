@@ -375,6 +375,9 @@ class curve(ISODate):
     def SetSwaps(self, swaps):
         return _phin.curve_SetSwaps(self, swaps)
 
+    def SetValueDate(self, valueDate):
+        return _phin.curve_SetValueDate(self, valueDate)
+
     def Build(self):
         return _phin.curve_Build(self)
 
