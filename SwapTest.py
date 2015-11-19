@@ -3,7 +3,7 @@ This module creates a curve and builds a new 5 year swap and an existing swap
 and prints out the float and fixed PVs. The existing swap and the new swap are
 identical thus should give the same results. It also defines a function:
 SanityCheck, this loops through the swap maturities loops through 5bp below the
-swap rate to 5bp above the swap rate and prints out the maturities.  The pvs
+swap rate to 5bp above the swap rate and prints out the PVs.  The PVs
 should be 0 for the swap rate, they are close but I am not in a position to say
 if they are close enough
 """
@@ -11,6 +11,7 @@ import phin
 
 # Load the module with the data in it
 import data
+# Load the module with GBP swaps
 import GBPInstrument
 
 # Get the data

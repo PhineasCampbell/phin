@@ -1,5 +1,10 @@
 /* File phin.i */
 
+/* The interface file used by swig to generate the Python wrappers for the c++ 
+   classes ISODates and curve
+*/
+
+
 /* this is the module name as in import x */
 %module phin
 

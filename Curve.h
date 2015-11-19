@@ -27,7 +27,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// The number of LIBORs into the class: ON, 1W, 1M, 2M, 3M, 6M, 12M
+// The number of LIBORs input into the class: ON, 1W, 1M, 2M, 3M, 6M, 12M
 const long NUMBER_OF_LIBORS = 7;
 // The number of swaps input into the class: 1yr, 2yr, 3yr, 4yr, 5yr, 6yr, 7yr, 8yr, 9yr, 10yr
 const long NUMBER_OF_SWAPS = 10;
@@ -55,7 +55,7 @@ public:
 	// Given a date in the days from 2000 fromat return the discount factor for this date
 	double GetDFFromYearsSince2000(long date);
 	// Given a start date and an end date in the days since 2000 format return the linearized annual rate for the return 
-	//between the two dates
+	// between the two dates
 	double AnnualRateFromDate(long startDate, long endDate);
 	// Given a start date and an end date in the ISO format return the linearized annual rate for the return between 
 	// the two dates
@@ -63,7 +63,7 @@ public:
 private:
 	// Array of libors
 	double _libors[NUMBER_OF_LIBORS];
-	// Array od swap rates
+	// Array of swap rates
 	double _swaps[NUMBER_OF_SWAPS];
 	// Value date for the curve
 	long _ValueDate;

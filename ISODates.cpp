@@ -218,7 +218,7 @@ bool ISODate::IsGoodBusinessDay(long daysSince2000)
 }
 
 
-// Return true if the date is a bank holiday.  The code is lifted from the function locate from section 3.4 in Numerical
+// Return true if daysSince2000 is a bank holiday.  The code is lifted from the function locate in section 3.4 in Numerical
 // Recipes in C
 bool ISODate::IsBankHoliday(long daysSince2000)
 {

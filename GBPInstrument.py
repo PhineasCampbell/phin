@@ -10,17 +10,18 @@ To Do:
 
 MAX_SEMI_ANNUAL_YEARS = 21
 """
-The class will not deal with swap of greater maturity than 10 years which
+The class will not deal with swaps of greater maturity than 10 years which
 corresponds to 21 payments
 """
 
 
 class GBPSwap(phin.ISODate):
     """
-    This a class that represents a GBP single curency fixed float swap.  It can
-    deal with both new swaps and existing swaps.  It differentiates between the
+    This class represents a GBP single curency fixed float swap.  It can deal
+    with both new swaps and existing swaps.  It differentiates between the
     two by looking for an existing rate.  The curve has no way of generating a
-    historical libor.  It builts up the two cashflows
+    historical libor.  It builds up the two cashflows and export functions to
+    calculate both the fixed and floating side PVs
     
     """
     def __init__(self,value_date,maturity,fixed_rate,PayReceive,curve,current_rate = None):
@@ -29,8 +30,10 @@ class GBPSwap(phin.ISODate):
         set swap otherwise it creates a new swap.  The maturity parameter is
         awkward in that it is different for the new and existing swaps.  For the
         new swap it is the number of years to maturity for the existing swap it is
-        the maturity date in ISO YYYYMMDD format.
+        the maturity date in ISO YYYYMMDD format. PayReceive is P for payer
+        otherwise a receiver
         """
+        # The sides are a dictionary consisting of an ISODate key and cashflow value
         self._paySide = {}
         self._receiveSide = {}
         self._curve = curve
@@ -52,7 +55,8 @@ class GBPSwap(phin.ISODate):
             self._receiveSide[firstDate]  = 0
             self._paySide[firstDate]  = 0
 
-            oldDate = value_date    
+            oldDate = value_date
+            # Loop up through the schedule to set the cashflows
             for i in sorted(self._paySide.keys()):
                 if i <= value_date:
                     pass
@@ -63,7 +67,7 @@ class GBPSwap(phin.ISODate):
                         self._paySide[i] = -1*fixed_rate*ds.YearFrac(oldDate,i)
                     else:
                         self._receiveSide[i] = fixed_rate*ds.YearFrac(oldDate,i)
-                        self._paySide[i] = -1*self._curve.AnnualRateFromISODate(oldDate,i)*ds.YearFrac(oldDate,i)
+                        self._paySide[i] = -1*self._curve.AnnualRate(oldDate,i)*ds.YearFrac(oldDate,i)
                 oldDate = i
 
             # We now deal with the first pay on float side
@@ -93,11 +97,11 @@ class GBPSwap(phin.ISODate):
                 else:
                     # If payer that is the pay side should be the fixed rate and negative
                     if(PayReceive == 'P'):
-                        self._receiveSide[i] = self._curve.AnnualRateFromISODate(oldDate,i)*ds.YearFrac(oldDate,i)
+                        self._receiveSide[i] = self._curve.ISOAnnualRate(oldDate,i)*ds.YearFrac(oldDate,i)
                         self._paySide[i] = -1*fixed_rate*ds.YearFrac(oldDate,i)
                     else:
                         self._receiveSide[i] = fixed_rate*ds.YearFrac(oldDate,i)
-                        self._paySide[i] = -1*self._curve.AnnualRateFromISODate(oldDate,i)*ds.YearFrac(oldDate,i)
+                        self._paySide[i] = -1*self._curve.AnnualRate(oldDate,i)*ds.YearFrac(oldDate,i)
                 oldDate = i
 
     def pv_pay(self):
