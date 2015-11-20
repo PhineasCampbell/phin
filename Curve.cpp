@@ -169,7 +169,7 @@ double curve::AnnualRateFromDate(long StartDate, long EndDate)
 	double endDF = GetDFFromYearsSince2000(EndDate);
 	
 	// Convert to annual rate
-	annualRate = (startDF/endDF-1)/((StartDate-EndDate)/DAYS_PER_YEAR);
+	annualRate = (startDF/endDF-1)/((EndDate-StartDate)/DAYS_PER_YEAR);
 
 	return annualRate;
 }

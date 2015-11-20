@@ -27,15 +27,21 @@ res = c.Build()
 
 # Build a new swap
 newSwap = GBPInstrument.GBPSwap(valueDate,5,fixedRate,'R',c)
-print('Receive PV:', newSwap.pv_receive())
-print('Pay PV:', newSwap.pv_pay())
+print('Receiver Receive PV:', newSwap.pv_receive())
+print('Receiver Pay PV:', newSwap.pv_pay())
 print('PV:',newSwap.pv())
 
+newSwap = GBPInstrument.GBPSwap(valueDate,5,fixedRate,'P',c)
+print('Payer Receive PV:', newSwap.pv_receive())
+print('Payer Pay PV:', newSwap.pv_pay())
+print('Payer PV:',newSwap.pv())
+
+
 # Build an existing swap
-existingSwap = GBPInstrument.GBPSwap(valueDate,maturityDate,fixedRate,'R',c,libors[5])
-print('Receive PV:', existingSwap.pv_receive())
-print('Pay PV:', existingSwap.pv_pay())
-print('PV:',existingSwap.pv())
+#existingSwap = GBPInstrument.GBPSwap(valueDate,maturityDate,fixedRate,'R',c,libors[5])
+#print('Receive PV:', existingSwap.pv_receive())
+#print('Pay PV:', existingSwap.pv_pay())
+#print('PV:',existingSwap.pv())
 
 
 def SanityCheck():

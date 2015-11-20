@@ -95,10 +95,12 @@ class GBPSwap(phin.ISODate):
                 if i == value_date:
                     pass
                 else:
-                    # If payer that is the pay side should be the fixed rate and negative
+                    # The pay side should always be negative
+                    # P: the swap pays fixed receives float
                     if(PayReceive == 'P'):
                         self._receiveSide[i] = self._curve.AnnualRateFromISODate(oldDate,i)*ds.YearFrac(oldDate,i)
                         self._paySide[i] = -1*fixed_rate*ds.YearFrac(oldDate,i)
+                    # Otherwise the swap pays float receives fixed
                     else:
                         self._receiveSide[i] = fixed_rate*ds.YearFrac(oldDate,i)
                         self._paySide[i] = -1*self._curve.AnnualRateFromISODate(oldDate,i)*ds.YearFrac(oldDate,i)
