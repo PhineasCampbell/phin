@@ -61,7 +61,7 @@ public:
 
 	// Return the number of days since 2000 from the stored day, month, year
 	long DaysSince2000();
-	// Return the number of days since 2000 from the input day, month year
+	// Return the number of days since 2000 from the input day, month, year
 	long DaysSince2000(long dayOfMonth, long Month, long Year);
 	// Set the date from and ISO date
 	void SetDate(long date);

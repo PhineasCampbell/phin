@@ -9073,7 +9073,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_curve_GetDFFromYearsSince2000(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_curve_GetDFFromDaysSince2000(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   curve *arg1 = (curve *) 0 ;
   long arg2 ;
@@ -9085,18 +9085,18 @@ SWIGINTERN PyObject *_wrap_curve_GetDFFromYearsSince2000(PyObject *SWIGUNUSEDPAR
   PyObject * obj1 = 0 ;
   double result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:curve_GetDFFromYearsSince2000",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OO:curve_GetDFFromDaysSince2000",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_curve, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "curve_GetDFFromYearsSince2000" "', argument " "1"" of type '" "curve *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "curve_GetDFFromDaysSince2000" "', argument " "1"" of type '" "curve *""'"); 
   }
   arg1 = reinterpret_cast< curve * >(argp1);
   ecode2 = SWIG_AsVal_long(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "curve_GetDFFromYearsSince2000" "', argument " "2"" of type '" "long""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "curve_GetDFFromDaysSince2000" "', argument " "2"" of type '" "long""'");
   } 
   arg2 = static_cast< long >(val2);
-  result = (double)(arg1)->GetDFFromYearsSince2000(arg2);
+  result = (double)(arg1)->GetDFFromDaysSince2000(arg2);
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
@@ -9297,7 +9297,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"curve_SetValueDate", _wrap_curve_SetValueDate, METH_VARARGS, NULL},
 	 { (char *)"curve_Build", _wrap_curve_Build, METH_VARARGS, NULL},
 	 { (char *)"curve_GetDFFromISODate", _wrap_curve_GetDFFromISODate, METH_VARARGS, NULL},
-	 { (char *)"curve_GetDFFromYearsSince2000", _wrap_curve_GetDFFromYearsSince2000, METH_VARARGS, NULL},
+	 { (char *)"curve_GetDFFromDaysSince2000", _wrap_curve_GetDFFromDaysSince2000, METH_VARARGS, NULL},
 	 { (char *)"curve_AnnualRateFromDate", _wrap_curve_AnnualRateFromDate, METH_VARARGS, NULL},
 	 { (char *)"curve_AnnualRateFromISODate", _wrap_curve_AnnualRateFromISODate, METH_VARARGS, NULL},
 	 { (char *)"delete_curve", _wrap_delete_curve, METH_VARARGS, NULL},

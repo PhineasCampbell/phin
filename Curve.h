@@ -53,7 +53,7 @@ public:
 	// Given a date in ISO format the return the discount factor for this date
 	double GetDFFromISODate(long date);
 	// Given a date in the days from 2000 fromat return the discount factor for this date
-	double GetDFFromYearsSince2000(long date);
+	double GetDFFromDaysSince2000(long date);
 	// Given a start date and an end date in the days since 2000 format return the linearized annual rate for the return 
 	// between the two dates
 	double AnnualRateFromDate(long startDate, long endDate);

@@ -108,7 +108,7 @@ bool curve::Build()
 // Given a date in the days since 2000 format return the discount factor for the date.  It does no checking on the 
 // input dates, it might return a Df for dates before the start of the df curve or dates beyond the the final date in
 // the DF curve.  
-double curve::GetDFFromYearsSince2000(long daysSince2000)
+double curve::GetDFFromDaysSince2000(long daysSince2000)
 {
 	double discountFactor = 0;
 
@@ -149,24 +149,23 @@ double curve::GetDFFromISODate(long date)
 	long daysSince2000 = 0;
 	
 	daysSince2000 = ConvertToDaysSince2000(date);
-	discountFactor = GetDFFromYearsSince2000(daysSince2000);
+	discountFactor = GetDFFromDaysSince2000(daysSince2000);
 
 	return discountFactor;
 }
 
 
 // Given two dates in days in since 2000 format return the linear annualized rate between those dates
+// This function will error if endDF is 0.  This should never happen, at least with the accuracy of
+// 32 bit floating point precision.  By handling the error here we are effectively swallowing the 
+// excpetion, if endDF is 0 then there is a serious problem elsewhere
 double curve::AnnualRateFromDate(long StartDate, long EndDate)
 {
 	double annualRate = 0;
 
-	// In order to stop this function failing we exit if the end date is 0 by arbitrarily returning 0
-	if(EndDate == 0)
-		return annualRate;
-
 	// Get the dfs
-	double startDF = GetDFFromYearsSince2000(StartDate);
-	double endDF = GetDFFromYearsSince2000(EndDate);
+	double startDF = GetDFFromDaysSince2000(StartDate);
+	double endDF = GetDFFromDaysSince2000(EndDate);
 	
 	// Convert to annual rate
 	annualRate = (startDF/endDF-1)/((EndDate-StartDate)/DAYS_PER_YEAR);

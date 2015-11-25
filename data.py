@@ -30,3 +30,5 @@ swaps.append(0.01861)
 fixedRate = 0.01423
 
 maturityDate = 20201022
+settlementDate = 20160122
+
