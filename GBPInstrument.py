@@ -33,6 +33,12 @@ class Side(phin.ISODate):
     receive fixed or pay and receive float. 
     """                
     def __init__(self, valueDate, maturity, rate, c, tenor, fixed = True, pay = True):
+        """
+        Create a new side. Input the value date in YYYYMMDD form, the number of
+        years to maturity, the fixed rate, a curve, the tenor of the float side
+        eg '6M', fixed = True float = False, pay = True, receive = False 
+        """
+        
         # The first thing we are going to do is extract the tenor
         try:
             self._tenorDate = SUPPORTED_TENORS[tenor]
@@ -45,16 +51,17 @@ class Side(phin.ISODate):
         self._cashFlows = dict()
         self._curve = c
 
+        # A ISODate object to generate schedule dates
         ds = phin.ISODate(valueDate)
-
-        oldDate = valueDate
 
         if pay:
             self._polarity = -1
         else:
             self._polarity = 1
 
-        # Split the fixed and float cases.  
+        oldDate = valueDate
+
+        # Split the fixed and float cases. There is code duplication here so may be a case for refacoring
         if fixed:
             # Build up the schedules 
             for i in range(2*maturity+1):
@@ -135,6 +142,10 @@ class FRA(phin.ISODate):
     _tenorDate = ()    
 
     def __init__(self, valueDate, settlementDate, tenor, c):
+        """
+        Create an FRA by inputing the value date, settlement date, tenor and
+        curve to createa GBP FRA
+        """
         try:
             self._tenorDate = SUPPORTED_TENORS[tenor]
         except KeyError:
@@ -143,9 +154,8 @@ class FRA(phin.ISODate):
         self._valueDate = valueDate
         self._settlementDate = settlementDate
         self._curve = c
-        self._dg = phin.ISODate(self._settlementDate)
-
         # Create an ISODate object to control date creation
+        self._dg = phin.ISODate(self._settlementDate)
         self._maturityDate = self._dg.DateIncrement(self._tenorDate[0],self._tenorDate[1],False)
 
     def rate(self):

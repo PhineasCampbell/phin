@@ -1,4 +1,4 @@
-This project is two c++ classes and swig generated wrapper so that the classes can be called by Python.
+This project is two c++ classes and swig generated wrapper so that the classes can be called from Python.
 The class ISODate is a set of date functions that are used to generate payment schedues for financial objects
 The second class curve bootstraps up the LIBORs and swap rates to build a GBP curve it exports functions
 to calculate discount factors and forward rates
@@ -32,6 +32,7 @@ To Do:
 Write makefile for Linux
 Refactor the curve class by extracting the spline functionality to a separate class
 Extend ISODate and Curve to other currencies
+The phin interface is a to complex rewrite the interface file to only show those datamembers that need to be seen
 
 
 LIBOR and Swap rate data can be found on https://www.theice.com/iba/historical-data
