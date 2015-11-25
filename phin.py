@@ -351,14 +351,10 @@ class DoubleVector(_object):
 DoubleVector_swigregister = _phin.DoubleVector_swigregister
 DoubleVector_swigregister(DoubleVector)
 
-class curve(ISODate):
+class curve(_object):
     __swig_setmethods__ = {}
-    for _s in [ISODate]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, curve, name, value)
     __swig_getmethods__ = {}
-    for _s in [ISODate]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, curve, name)
     __repr__ = _swig_repr
 
@@ -384,8 +380,8 @@ class curve(ISODate):
     def GetDFFromISODate(self, date):
         return _phin.curve_GetDFFromISODate(self, date)
 
-    def GetDFFromYearsSince2000(self, date):
-        return _phin.curve_GetDFFromYearsSince2000(self, date)
+    def GetDFFromDaysSince2000(self, date):
+        return _phin.curve_GetDFFromDaysSince2000(self, date)
 
     def AnnualRateFromDate(self, startDate, endDate):
         return _phin.curve_AnnualRateFromDate(self, startDate, endDate)

@@ -35,7 +35,8 @@ const long NUMBER_OF_SWAPS = 10;
 const long CURVE_LENGTH = NUMBER_OF_LIBORS + NUMBER_OF_SWAPS;
 
 
-class curve: public ISODate
+// Note private inheritance so as not to complicate the curve interface.
+class curve: private ISODate
 {
 public:
 	// Basic constructor
