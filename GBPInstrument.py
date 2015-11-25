@@ -146,7 +146,6 @@ class FRA(phin.ISODate):
         self._dg = phin.ISODate(self._settlementDate)
 
         # Create an ISODate object to control date creation
-        print(self._tenorDate[0],self._tenorDate[1])
         self._maturityDate = self._dg.DateIncrement(self._tenorDate[0],self._tenorDate[1],False)
 
     def rate(self):
