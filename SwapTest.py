@@ -10,12 +10,6 @@ if they are close enough
 
 import phin
 
-########################################################################
-#
-# To Do:
-#       Check FRA pricing
-#
-########################################################################
 
 
 # Load the module with the data in it

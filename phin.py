@@ -374,6 +374,9 @@ class curve(_object):
     def SetValueDate(self, valueDate):
         return _phin.curve_SetValueDate(self, valueDate)
 
+    def GetValueDate(self):
+        return _phin.curve_GetValueDate(self)
+
     def Build(self):
         return _phin.curve_Build(self)
 
