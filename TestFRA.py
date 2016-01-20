@@ -1,7 +1,7 @@
 import phin
 
 """
-A quick and dirty module to check the FRS pricing tool
+A quick and dirty module to check the FRA pricing object
 """
 
 # Load the module with the data in it
