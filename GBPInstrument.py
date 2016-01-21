@@ -154,7 +154,6 @@ class BackwardSide(phin.ISODate):
                 if i <= valueDate:
                     self._cashFlows[i] = 0
                     oldDate = i
-                    pass
                 else:
                     # If this is the first payment then use the existing rate
                     if(j == 1):
