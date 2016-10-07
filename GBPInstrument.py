@@ -32,7 +32,7 @@ class Side(phin.ISODate):
     float.  It is important that the structure is able to capture swaps that pay and
     receive fixed or pay and receive float. 
     """                
-    def __init__(self, valueDate, maturity, rate, c, tenor, fixed = True, pay = True):
+    def __init__(self, value_date, maturity, rate, c, tenor, fixed = True, pay = True):
         """
         Create a new side. Input the value date in YYYYMMDD form, the number of
         years to maturity, the fixed rate, a curve, the tenor of the float side
@@ -41,137 +41,266 @@ class Side(phin.ISODate):
         
         # The first thing we are going to do is extract the tenor
         try:
-            self._tenorDate = SUPPORTED_TENORS[tenor]
+            self._tenor_date = SUPPORTED_TENORS[tenor]
         except KeyError:
             print('Incorrect Tenor')
             return
 
         self._pay = pay
         self._fixed = fixed
-        self._cashFlows = dict()
+        self._cashflows = dict()
         self._curve = c
 
         # A ISODate object to generate schedule dates
-        ds = phin.ISODate(valueDate)
+        ds = phin.ISODate(value_date)
 
         if pay:
             self._polarity = -1
         else:
             self._polarity = 1
 
-        oldDate = valueDate
+        old_date = value_date
 
-        # Split the fixed and float cases. There is code duplication here so may be a case for refacoring
+        # Split the fixed and float cases. There is code duplication here so may be a case for refactoring
         if fixed:
             # Build up the schedules 
             for i in range(2*maturity+1):
-                payDate = ds.DateIncrement(self._tenorDate[0],self._tenorDate[1]*i,False)
+                pay_date = ds.DateIncrement(self._tenor_date[0],self._tenor_date[1]*i,False)
                 # There is no flow on value date
-                if payDate ==  valueDate:
-                    self._cashFlows[payDate] = 0
+                if pay_date ==  value_date:
+                    self._cashflows[pay_date] = 0
                 else:
-                    self._cashFlows[payDate] = self._polarity*rate*ds.YearFrac(oldDate,payDate)
-                oldDate = payDate
+                    self._cashflows[pay_date] = self._polarity*rate*ds.YearFrac(old_date,pay_date)
+                old_date = pay_date
         else: # Must be float
             # Build up the schedules 
             for i in range(2*maturity+1):
-                payDate = ds.DateIncrement(self._tenorDate[0],self._tenorDate[1]*i,False)
+                pay_date = ds.DateIncrement(self._tenor_date[0],self._tenor_date[1]*i,False)
                 # There is no flow on value date
-                if payDate ==  valueDate:
-                    self._cashFlows[payDate] = 0
+                if pay_date ==  value_date:
+                    self._cashflows[pay_date] = 0
                 else:
-                    self._cashFlows[payDate] = self._polarity*self._curve.AnnualRateFromISODate(oldDate,payDate)*ds.YearFrac(oldDate,payDate)
-                oldDate = payDate
+                    self._cashflows[pay_date] = self._polarity*self._curve.AnnualRateFromISODate(old_date,pay_date)*ds.YearFrac(old_date,pay_date)
+                old_date = pay_date
 
-    def PV(self):
+    def pv(self):
         """
         Return the PV for the cash flow using the curve defined in self._curve
         """
-        pvPay = 0
+        pv_pay = 0
         
-        for i,j in self._cashFlows.items():
-            pvPay += j*self._curve.GetDFFromISODate(i)
-        return pvPay;
+        for i,j in self._cashflows.items():
+            pv_pay += j*self._curve.GetDFFromISODate(i)
+        return pv_pay;
 
+
+class BackwardSide(phin.ISODate):
+    """
+    This class is the side of a swap.  It can be either pay or receive and fixed or
+    float.  It is important that the structure is able to capture swaps that pay and
+    receive fixed or pay and receive float. 
+    """                
+    def __init__(self, value_date, maturity_date, rate, c, tenor, current_rate, fixed = True, pay = True):
+        """
+        Create a new side. Input the value date in YYYYMMDD form, the number of
+        years to maturity, the fixed rate, a curve, the tenor of the float side
+        eg '6M', fixed = True float = False, pay = True, receive = False 
+        """
         
+        # The first thing we are going to do is extract the tenor
+        try:
+            self._tenor_date = SUPPORTED_TENORS[tenor]
+        except KeyError:
+            print('Incorrect Tenor')
+            return
+
+        self._pay = pay
+        self._fixed = fixed
+        self._cashflows = dict()
+        self._curve = c
+
+        if pay:
+            self._polarity = -1
+        else:
+            self._polarity = 1
+
+        # A ISODate object to generate schedule dates
+        ds = phin.ISODate(maturity_date)
+
+        # Build up the schedules 
+        for i in range(0,-1*MAX_SEMI_ANNUAL_YEARS,-1):
+            pay_date = ds.DateIncrement(self._tenor_date[0],self._tenor_date[1]*i,False)
+            self._cashflows[pay_date] = 0
+            if pay_date <= value_date:
+                break
+
+        # Given we have a schedule we can now build up the cashflows
+        # Split the fixed and float cases. There is code duplication here so may be a case for refactoring
+        sorted_keys = sorted(self._cashflows.keys())
+        if fixed:
+            for i in sorted_keys:
+                # There are no payments before the value date
+                if i <= value_date:
+                    self._cashflows[i] = 0
+                    old_date = i
+                else:
+                    self._cashflows[i] = self._polarity*rate*ds.YearFrac(old_date,i)
+                    old_date = i                
+        # Otherwise must be float
+        else:
+            for j,i in enumerate(sorted_keys):
+                #There are no payments before the value date
+                if i <= value_date:
+                    self._cashflows[i] = 0
+                    old_date = i
+                else:
+                    # If this is the first payment then use the existing rate
+                    if(j == 1):
+                        self._cashflows[i] = self._polarity*current_rate*ds.YearFrac(old_date,i)
+                    else:
+                        self._cashflows[i] = self._polarity*self._curve.AnnualRateFromISODate(old_date,i)*ds.YearFrac(old_date,i)
+                    old_date = i                
+            
+    def pv(self):
+        """
+        Return the PV for the cash flow using the curve defined in self._curve
+        """
+        pv_pay = 0
+        for i,j in self._cashflows.items():
+            pv_pay += j*self._curve.GetDFFromISODate(i)
+        return pv_pay;
+
+
 class GBPSwap(Side):
     """
     This is a class that implements a standard GBP fixed float swap.  It
     simpifies the interface by making it a semi annual fixed float swap
     """
-    _payFixed = True
-    _receiveFixed = False
+    _pay_fixed = True
+    _receive_fixed = False
 
-    def __init__(self,valueDate,maturity,rate,pay,c):
+    def __init__(self,value_date,maturity,rate,pay,c):
         """
         Input the value date, the years to maturity, fixed rate, pay or receive True = Pay
         and a curve to create a GBP IRS
         """
-        self._valueDate = valueDate
+        self._value_date = value_date
         self._maturity = maturity
         self._rate = rate
 
         if not pay:
-            self._payFixed = False
-            self._receiveFixed = True
+            self._pay_fixed = False
+            self._receive_fixed = True
 
         self._curve = c     
-        self._paySide = Side(self._valueDate,self._maturity,self._rate,self._curve,'6M',self._payFixed, True)
-        self._receiveSide = Side(self._valueDate,self._maturity,self._rate,self._curve,'6M',self._receiveFixed, False)
+        self._paySide = Side(self._value_date,self._maturity,self._rate,self._curve,'6M',self._pay_fixed, True)
+        self._receiveSide = Side(self._value_date,self._maturity,self._rate,self._curve,'6M',self._receive_fixed, False)
 
     def pay_side_pv(self):
-        return self._paySide.PV()
+        """
+        Return the pv of the pay side 
+        """
+        return self._paySide.pv()
 
     def receive_side_pv(self):
-        return self._receiveSide.PV()
+        """
+        Return the pv of the receive side
+        """
+        return self._receiveSide.pv()
 
     def pv(self):
-        return self._paySide.PV() + self._receiveSide.PV()
+        """
+        Return the pv of the swap
+        """
+        return self._paySide.pv() + self._receiveSide.pv()
     
+
+class GBPExistingSwap(BackwardSide):
+    """
+    A class to capture the behaviour of an existing swap
+    """
+    _value_date = 0
+    _maturity_date = 0
+    _fixedRate = 0
+    _currentFloatRate = 0
+
+    _pay_fixed = True
+    _receive_fixed = False
+
+    def __init__(self, value_date, maturity_date, fixed_rate, current_float_rate, pay, c):
+        """
+        Create an instance of a existing swap by passing in the value date,
+        maturity date, fixed rate, current float rate and a curve
+        """
+        self._value_date = value_date
+        self._maturity_date = maturity_date
+        self._fixedRate = fixed_rate
+        self._currentFloatRate = current_float_rate
+        self._curve = c
+        self._pay_fixed = True
+
+        if not pay:
+            self._pay_fixed = False
+            self._receive_fixed = True
+
+        # Create the pay and receive sides
+        self._paySide =     BackwardSide(self._value_date,self._maturity_date,self._fixedRate,self._curve,'6M',self._currentFloatRate,self._pay_fixed, True)
+        self._receiveSide = BackwardSide(self._value_date,self._maturity_date,self._fixedRate,self._curve,'6M',self._currentFloatRate,False,False)
+
+    def pay_side_pv(self):
+        return self._paySide.pv()
+
+    def receive_side_pv(self):
+        return self._receiveSide.pv()
+
+    def pv(self):
+        return self._paySide.pv() + self._receiveSide.pv()
+                      
 
 class FRA(phin.ISODate):
     """
     A standard GBP FRA the inputs are a value date, a settlement date, a tenor
     e.g. 3M and a GBP curve.
     """
-    _valueDate = 0
-    _settlementDate = 0
-    _maturityDate = 0
+    _value_date = 0
+    _settlement_date = 0
+    _maturity_date = 0
     _tenor = 0
-    # The _tenorDate is a tuple that contains the month unit eg 'M' and the number of these required to get to maturity
-    _tenorDate = ()    
+    # The _tenor_date is a tuple that contains the month unit eg 'M' and the number of these required to get to maturity
+    _tenor_date = ()    
 
-    def __init__(self, valueDate, settlementDate, tenor, c):
+    def __init__(self, value_date, settlement_date, tenor, c):
         """
         Create an FRA by inputing the value date, settlement date, tenor and
-        curve to createa GBP FRA
-        """
+        curve to create a GBP FRA
+        """ 
         try:
-            self._tenorDate = SUPPORTED_TENORS[tenor]
+            self._tenor_date = SUPPORTED_TENORS[tenor]
         except KeyError:
             print('Incorrect Tenor')
             return
-        self._valueDate = valueDate
-        self._settlementDate = settlementDate
+        self._value_date = value_date
+        self._settlement_date = settlement_date
         self._curve = c
         # Create an ISODate object to control date creation
-        self._dg = phin.ISODate(self._settlementDate)
-        self._maturityDate = self._dg.DateIncrement(self._tenorDate[0],self._tenorDate[1],False)
+        self._dg = phin.ISODate(self._settlement_date)
+        self._maturity_date = self._dg.DateIncrement(self._tenor_date[0],self._tenor_date[1],False)
 
     def rate(self):
         """
         Return the par FRA rate for the given curve
         """
         # Get the forward rate
-        forwardRate = self._curve.AnnualRateFromISODate(self._settlementDate,self._maturityDate)
+        forward_rate = self._curve.AnnualRateFromISODate(self._settlement_date,self._maturity_date)
         
         # Get the forward discount factors
-        dfAtSettlement = self._curve.GetDFFromISODate(self._settlementDate)
-        dfAtMaturity = self._curve.GetDFFromISODate(self._maturityDate)
+        df_at_settlement = self._curve.GetDFFromISODate(self._settlement_date)
+        df_at_maturity = self._curve.GetDFFromISODate(self._maturity_date)
 
         # Now calculate the convexity adjustment
-        convexityAdjustment = dfAtMaturity/dfAtSettlement
+        convexity_adjustment = df_at_maturity/df_at_settlement
 
-        rate = forwardRate*convexityAdjustment
+        rate = forward_rate*convexity_adjustment
 
         return rate
+
