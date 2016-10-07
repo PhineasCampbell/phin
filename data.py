@@ -27,11 +27,37 @@ swaps.append(0.018)
 swaps.append(0.01861)
 
 
+<<<<<<< HEAD
 fixed_rate = 0.01423
 current_rate = 0.007425
 
 maturity_date = 20201022
 settlement_date = 20160122
+
+
+trades = {}
+
+trades[101] = {}
+trades[102] = {}
+
+trades[101]['maturiyDate'] = 20171030
+trades[101]['fixedRate'] = 0.035
+trades[101]['payOrReceive'] = True
+trades[101]['currentFloatRate']= 0.012
+
+trades[102]['maturiyDate'] = 20171030
+trades[102]['fixedRate'] = 0.035
+trades[102]['payOrReceive'] = False
+trades[102]['currentFloatRate']= 0.012
+
+
+
+          
+=======
+fixedRate = 0.01423
+currentRate = 0.007425
+>>>>>>> b1e2069e9ab7c6faf9fc6366a90f414139d915e5
+
 
 
 trades = {}
