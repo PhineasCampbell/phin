@@ -1,4 +1,4 @@
-/* File phin.i */
+/* File phin64.i */
 
 /* The interface file used by swig to generate the Python wrappers for the c++ 
    classes ISODates and curve
@@ -6,7 +6,7 @@
 
 
 /* this is the module name as in import x */
-%module phin
+%module phin64
 
 /* To simplfy the interface we exclude some constants */
 %ignore NUMBER_OF_LIBORS;
@@ -46,8 +46,4 @@ namespace std {
 /* generate exported functions using the header file */
 %include "Curve.h"  /*this just expands out for the interface*/
 
-/* This just gets copied to the wrap_file */
-%{
-/* does this get copied */
-%}
 

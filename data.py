@@ -53,10 +53,9 @@ trades[102]['currentFloatRate']= 0.012
 
 
           
-=======
 fixedRate = 0.01423
 currentRate = 0.007425
->>>>>>> b1e2069e9ab7c6faf9fc6366a90f414139d915e5
+
 
 
 
